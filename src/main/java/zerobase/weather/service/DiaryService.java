@@ -16,6 +16,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.time.LocalDate;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Service // 어노테이션을 붙여주지 않으면 스프링 부트가 서비스 클래스임을 인식하지 못하고 빈으로 등록도 안됨
@@ -98,5 +99,13 @@ public class DiaryService {
         } catch (ParseException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public List<Diary> readDiry(LocalDate date) {
+        return diaryRepository.findAllByDate(date);
+    }
+
+    public List<Diary> readDiaries(LocalDate startDate, LocalDate endDate) {
+        return diaryRepository.findAllByDateBetween(startDate, endDate);
     }
 }
