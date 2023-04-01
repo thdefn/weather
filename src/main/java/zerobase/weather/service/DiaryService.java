@@ -114,4 +114,8 @@ public class DiaryService {
         nowDiary.setText(text);
         diaryRepository.save(nowDiary); // 아이디 값은 그대로 둔 채로 텍스트만 바꿨기 때문에 업데이트
     }
+
+    public void deleteDiary(LocalDate date) {
+        diaryRepository.deleteAllByDate(date);
+    }
 }
