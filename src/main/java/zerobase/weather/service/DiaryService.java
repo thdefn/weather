@@ -108,4 +108,10 @@ public class DiaryService {
     public List<Diary> readDiaries(LocalDate startDate, LocalDate endDate) {
         return diaryRepository.findAllByDateBetween(startDate, endDate);
     }
+
+    public void updateDiary(LocalDate date, String text) {
+        Diary nowDiary = diaryRepository.getFirstByDate(date);
+        nowDiary.setText(text);
+        diaryRepository.save(nowDiary); // 아이디 값은 그대로 둔 채로 텍스트만 바꿨기 때문에 업데이트
+    }
 }
