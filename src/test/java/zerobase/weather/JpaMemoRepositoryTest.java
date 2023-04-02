@@ -13,7 +13,7 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
-@Transactional
+@Transactional // 테스트 코드를 작성할때는 트랜잭셔널을 쓰면 다 롤백시켜줌
 public class JpaMemoRepositoryTest {
     @Autowired
     JpaMemoRepository jpaMemoRepository;

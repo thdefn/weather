@@ -7,6 +7,7 @@ import org.json.simple.parser.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import zerobase.weather.domain.Diary;
 import zerobase.weather.repository.DiaryRepository;
 
@@ -20,6 +21,7 @@ import java.util.List;
 import java.util.Map;
 
 @Service // 어노테이션을 붙여주지 않으면 스프링 부트가 서비스 클래스임을 인식하지 못하고 빈으로 등록도 안됨
+@Transactional(readOnly = true)
 public class DiaryService {
 
     @Value("${openweathermap.key}")
@@ -34,6 +36,7 @@ public class DiaryService {
     }
 
     // 코드의 재사용성과 가독성을 위해 각각의 기능들을 함수로 분리
+    @Transactional
     public void createDiary(LocalDate date, String text) {
         // open weather map 에서 날씨 데이터 받아오기
         String weatherData = getWeatherString();
@@ -101,14 +104,17 @@ public class DiaryService {
         }
     }
 
+    @Transactional(readOnly = true)
     public List<Diary> readDiry(LocalDate date) {
         return diaryRepository.findAllByDate(date);
     }
 
+    @Transactional(readOnly = true)
     public List<Diary> readDiaries(LocalDate startDate, LocalDate endDate) {
         return diaryRepository.findAllByDateBetween(startDate, endDate);
     }
 
+    @Transactional
     public void updateDiary(LocalDate date, String text) {
         Diary nowDiary = diaryRepository.getFirstByDate(date);
         nowDiary.setText(text);
