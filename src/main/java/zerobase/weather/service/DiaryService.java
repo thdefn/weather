@@ -1,5 +1,6 @@
 package zerobase.weather.service;
 
+import lombok.extern.slf4j.Slf4j;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -24,6 +25,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@Slf4j
 @Service // 어노테이션을 붙여주지 않으면 스프링 부트가 서비스 클래스임을 인식하지 못하고 빈으로 등록도 안됨
 @Transactional(readOnly = true)
 public class DiaryService {
@@ -45,12 +47,14 @@ public class DiaryService {
     @Transactional // 디비 작업이므로 트랜잭셔널
     @Scheduled(cron = "* * 1 * * *") // 스케쥴 된 작업을 진행하는 함수임
     public void saveWeatherDate(){
+        log.info("오늘도 날씨 데이터 잘 가져옴~!");
         dateWeatherRepository.save(getWeatherFromApi());
     }
 
     // 코드의 재사용성과 가독성을 위해 각각의 기능들을 함수로 분리
     @Transactional(isolation = Isolation.SERIALIZABLE)
     public void createDiary(LocalDate date, String text) {
+        log.info("started to create diary");
         // 날씨 데이터 가져오기 1)api or 2)db
         DateWeather dateWeather = getDateWeather(date);
 
@@ -61,6 +65,7 @@ public class DiaryService {
         nowDiary.setText(text);
 
         diaryRepository.save(nowDiary);
+        log.info("end to create diary");
     }
 
     private DateWeather getDateWeather(LocalDate date){
@@ -142,6 +147,7 @@ public class DiaryService {
 
     @Transactional(readOnly = true)
     public List<Diary> readDiry(LocalDate date) {
+        log.debug("read diary");
         return diaryRepository.findAllByDate(date);
     }
 
